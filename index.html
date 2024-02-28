@@ -24,12 +24,28 @@
 
       let x = canvas.width/2;
       let y = canvas.height-20;
+      let dx = -2;
+      let dy = -4;
+      let zPressed = false;
+      let rightPressed = false;
+      let leftPressed = false;
 
-      ctx.beginPath();
-      ctx.arc(x, y, 20, 0, Math.PI * 2, false);
-      ctx.fillStyle = "purple";
-      ctx.fill();
-      ctx.closePath();
+      function drawOrb() {
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2, false);
+        ctx.fillStyle = "purple";
+        ctx.fill();
+        ctx.closePath();
+      }
+      
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawOrb();
+      }
+
+      function jump() {
+        
+      }
     </script>
   </body>
 </html>
