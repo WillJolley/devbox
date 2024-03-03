@@ -61,7 +61,7 @@
         if (rightPressed) {
           theOrb.x = Math.min(theOrb.x + 7, canvas.width - theOrb.radius);
         } else if (leftPressed) {
-          theOrb.x = Math.max(theOrb.x - 7, 0);
+          theOrb.x = Math.max(theOrb.x - 7, theOrb.radius);
         } 
       }
 
@@ -74,7 +74,8 @@
             leftPressed = true
             break
           case 'z':
-            theOrb.yVelocity = -5
+            theOrb.yVelocity = -15
+            zKeyPressed = true
             break
         }
       });
