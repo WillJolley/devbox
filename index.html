@@ -22,18 +22,16 @@
       const canvas = document.getElementById("myCanvas");
       const ctx = canvas.getContext("2d");
 
-      let dx = -2;
-      let dy = -4;
-      const orbRadius = 20;
       const gravity = .5;
       let zKeyPressed = false;
       let rightPressed = false;
       let leftPressed = false;
 
       let theOrb = {
-        height: 
+        radius: 20, 
         x: canvas.width/2,
-        y: canvas.height-20,
+        y: canvas.height-25,
+        height: 20,
         xVelocity: 0,
         yVelocity: 1,
         jumping: false,
@@ -41,40 +39,30 @@
 
         draw() {
           ctx.beginPath();
-          ctx.arc(this.x, this.y, orbRadius, 0, Math.PI * 2, false);
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
           ctx.fillStyle = "purple";
           ctx.fill();
           ctx.closePath();
         },
 
         update() {
-          this.draw();
           this.y += this.yVelocity;
-          if (this.y + this.height)
+          if (this.y + this.height + this.yVelocity < canvas.height) {
           this.yVelocity += gravity;
+          } else this.yVelocity = 0;
         }
       }
       
-      // function drawOrb() {
-      //   ctx.beginPath();
-      //   ctx.arc(x, y, orbRadius, 0, Math.PI * 2, false);
-      //   ctx.fillStyle = "purple";
-      //   ctx.fill();
-      //   ctx.closePath();
-      // }
-      
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        theOrb.draw();
         theOrb.update();
 
         if (rightPressed) {
-          theOrb.x = Math.min(theOrb.x + 7, canvas.width - orbRadius);
+          theOrb.x = Math.min(theOrb.x + 7, canvas.width - theOrb.radius);
         } else if (leftPressed) {
           theOrb.x = Math.max(theOrb.x - 7, 0);
-        } else if (zKeyPressed && theOrb.jumping == false) {
-          theOrb.yVelocity -= 20;
-          theOrb.jumping = true;
-        }
+        } 
       }
 
       function jump() {
