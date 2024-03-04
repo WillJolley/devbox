@@ -16,7 +16,7 @@
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <canvas id="myCanvas" width="770" height="580"></canvas>
 
     <script>
       const canvas = document.getElementById("myCanvas");
@@ -45,20 +45,29 @@
       const background = new Sprite({
         position: {
           x: 0,
-          y: 0,
+          y: 0
         },
         imageSrc: './img/library.png'
       })
 
-      let theOrb = {
-        radius: 20, 
-        x: canvas.width/2,
-        y: canvas.height-25,
-        height: 20,
-        xVelocity: 0,
-        yVelocity: 1,
-        jumping: false,
-  
+      class Orb {
+        constructor() {
+          this.radius = 20;
+          this.x = canvas.width/2;
+          this.y = canvas.height-25;
+          this.height = 20;
+          this.xVelocity = 0;
+          this.yVelocity = 1;
+          this.jumping = false;
+          this.cameraBox = {
+            position: {
+              x: this.x,
+              y: this.y
+            },
+            width: 30,
+            height: 400,
+          };
+        }
 
         draw() {
           ctx.beginPath();
@@ -66,15 +75,27 @@
           ctx.fillStyle = "purple";
           ctx.fill();
           ctx.closePath();
-        },
+        }
 
         update() {
+
+          // ctx.fillstyle = 'red';
+          // ctx.fillRect(
+          //   this.cameraBox.position.x,
+          //   this.cameraBox.position.y,
+          //   this.cameraBox.width,
+          //   this.cameraBox.height
+          // )
+
           this.y += this.yVelocity;
           if (this.y + this.height + this.yVelocity < canvas.height) {
           this.yVelocity += gravity;
           } else this.yVelocity = 0;
         }
       }
+
+      const orby = new Orb({
+      })
       
       function animate() {
         window.requestAnimationFrame(animate)
@@ -82,16 +103,16 @@
         // ctx.fillRect(0, 0, canvas.width, canvas.height)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = 'dimgray';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         background.draw();
-        theOrb.draw();
-        theOrb.update();
+        orby.draw();
+        orby.update();
 
         if (rightPressed) {
-          theOrb.x = Math.min(theOrb.x + 7, canvas.width - theOrb.radius);
+          orby.x = Math.min(orby.x + 7, canvas.width - orby.radius);
         } else if (leftPressed) {
-          theOrb.x = Math.max(theOrb.x - 7, theOrb.radius);
+          orby.x = Math.max(orby.x - 7, orby.radius);
         } 
       }
 
@@ -104,7 +125,7 @@
             leftPressed = true
             break
           case 'z':
-            theOrb.yVelocity = -15;
+            orby.yVelocity = -15;
             zKeyPressed = true
             break
         }
