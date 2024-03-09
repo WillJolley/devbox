@@ -44,9 +44,23 @@
           }
           ctx.drawImage(this.image, this.position.x, this.position.y)
         }
+
+        updateBackground1() {
+          this.position = {
+            x: 0,
+            y: 0 + bgScroll
+          }
+        }
+
+        updateBackground2() {
+          this.position = {
+            x: 0,
+            y: -canvas.height + bgScroll
+          }
+        }
       }
 
-      let background = new Sprite({
+      let background1 = new Sprite({
         position: {
           x: 0,
           y: 0 + bgScroll
@@ -132,10 +146,11 @@
 
         ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
-        background.draw();
+        background1.draw();
+        background2.draw();
+        background1.updateBackground1();
+        background2.updateBackground2();
         orby.update();
-        // background.translate(0, scrolling);
-        // orby.translate(0, scrolling);
 
         // Scrolling
 
