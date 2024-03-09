@@ -129,7 +129,9 @@
         ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         background.draw();
+        background.position.y -= scrolling;
         orby.update();
+        orby.y -= scrolling;
         // background.translate(0, scrolling);
         // orby.translate(0, scrolling);
 
@@ -152,7 +154,7 @@
             break
           case 'z':
             orby.yVelocity = -15;
-            scrolling += 2;
+            // scrolling -= 2;
             // zKeyPressed = true
             break
         }
@@ -165,6 +167,9 @@
           case 'ArrowLeft': 
             leftPressed = false
             break
+          case 'z':
+            orby.yVelocity = 0;
+            // scrolling += 2;
         }
       });
       
