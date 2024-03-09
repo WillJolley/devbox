@@ -22,10 +22,13 @@
       const canvas = document.getElementById("myCanvas");
       const ctx = canvas.getContext("2d");
 
+      let scrollThreshold = 200;
+      let scroll = 0;
       const gravity = .5;
-      let zKeyPressed = false;
+      // let zKeyPressed = false;
       let rightPressed = false;
       let leftPressed = false;
+      const maxPlatforms = 10;
 
       class Sprite {
         constructor({position, imageSrc}) {
@@ -59,14 +62,14 @@
           this.xVelocity = 0;
           this.yVelocity = 1;
           this.jumping = false;
-          this.cameraBox = {
-            position: {
-              x: this.x,
-              y: this.y
-            },
-            width: 30,
-            height: 400,
-          };
+          // this.cameraBox = {
+          //   position: {
+          //     x: this.x,
+          //     y: this.y
+          //   },
+          //   width: 30,
+          //   height: 400,
+          // };
         }
 
         draw() {
@@ -77,15 +80,35 @@
           ctx.closePath();
         }
 
-        update() {
+        // updateCameraBox() {
+        //   this.cameraBox = {
+        //     position: {
+        //       x: this.x - 30,
+        //       y: this.y - 200
+        //     },
+        //     width: 60,
+        //     height: 400,
+        //   }
+        // }
 
-          // ctx.fillstyle = 'red';
+        // shouldPanCameraUp() {
+        //   const cameraBoxTop = this.cameraBox.position.y + this.cameraBox.height;
+        //   if (cameraBoxTop >= canvas.height) {
+        //     console.log('go UP');
+        //   }
+        // }
+
+        update() {
+          this.draw();
+          // this.updateCameraBox();
+
+          // ctx.fillstyle = 'rgba(255, 0, 0, .2)';
           // ctx.fillRect(
           //   this.cameraBox.position.x,
           //   this.cameraBox.position.y,
           //   this.cameraBox.width,
           //   this.cameraBox.height
-          // )
+          // );
 
           this.y += this.yVelocity;
           if (this.y + this.height + this.yVelocity < canvas.height) {
@@ -103,17 +126,20 @@
         // ctx.fillRect(0, 0, canvas.width, canvas.height)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = 'dimgray';
+        ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         background.draw();
-        orby.draw();
         orby.update();
 
         if (rightPressed) {
           orby.x = Math.min(orby.x + 7, canvas.width - orby.radius);
         } else if (leftPressed) {
           orby.x = Math.max(orby.x - 7, orby.radius);
-        } 
+        }
+
+        if (orby.y <= scrollThreshold) {
+          scroll = -orby.yVelocity;
+        }
       }
 
       document.addEventListener("keydown", (event) => {
@@ -126,7 +152,7 @@
             break
           case 'z':
             orby.yVelocity = -15;
-            zKeyPressed = true
+            // zKeyPressed = true
             break
         }
       });
