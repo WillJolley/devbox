@@ -22,8 +22,8 @@
       const canvas = document.getElementById("myCanvas");
       const ctx = canvas.getContext("2d");
 
-      let scrollThreshold = 200;
-      let scroll = 0;
+      // let scrollThreshold = 200;
+      let scrolling = 0;
       const gravity = .5;
       // let zKeyPressed = false;
       let rightPressed = false;
@@ -130,15 +130,15 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         background.draw();
         orby.update();
+        // background.translate(0, scrolling);
+        // orby.translate(0, scrolling);
+
+        // Right-left directional control
 
         if (rightPressed) {
           orby.x = Math.min(orby.x + 7, canvas.width - orby.radius);
         } else if (leftPressed) {
           orby.x = Math.max(orby.x - 7, orby.radius);
-        }
-
-        if (orby.y <= scrollThreshold) {
-          scroll = -orby.yVelocity;
         }
       }
 
@@ -152,6 +152,7 @@
             break
           case 'z':
             orby.yVelocity = -15;
+            scrolling += 2;
             // zKeyPressed = true
             break
         }
