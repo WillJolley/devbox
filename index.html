@@ -16,7 +16,7 @@
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="770" height="580"></canvas>
+    <canvas id="myCanvas" width="770" height="640"></canvas>
 
     <script>
       const canvas = document.getElementById("myCanvas");
@@ -24,6 +24,7 @@
 
       // let scrollThreshold = 200;
       let scrolling = 0;
+      let bgScroll = 0;
       const gravity = .5;
       // let zKeyPressed = false;
       let rightPressed = false;
@@ -32,9 +33,9 @@
 
       class Sprite {
         constructor({position, imageSrc}) {
-          this.position = position
-          this.image = new Image()
-          this.image.src = imageSrc
+          this.position = position;
+          this.image = new Image();
+          this.image.src = imageSrc;
         }
 
         draw() {
@@ -45,10 +46,18 @@
         }
       }
 
-      const background = new Sprite({
+      let background = new Sprite({
         position: {
           x: 0,
-          y: 0
+          y: 0 + bgScroll
+        },
+        imageSrc: './img/library.png'
+      })
+
+      let background2 = new Sprite({
+        position: {
+          x: 0,
+          y: -canvas.height + bgScroll
         },
         imageSrc: './img/library.png'
       })
@@ -62,14 +71,14 @@
           this.xVelocity = 0;
           this.yVelocity = 1;
           this.jumping = false;
-          // this.cameraBox = {
-          //   position: {
-          //     x: this.x,
-          //     y: this.y
-          //   },
-          //   width: 30,
-          //   height: 400,
-          // };
+          this.scrollBox = {
+            position: {
+              x: this.x,
+              y: this.y
+            },
+            width: 60,
+            height: 400,
+          };
         }
 
         draw() {
@@ -80,40 +89,35 @@
           ctx.closePath();
         }
 
-        // updateCameraBox() {
-        //   this.cameraBox = {
-        //     position: {
-        //       x: this.x - 30,
-        //       y: this.y - 200
-        //     },
-        //     width: 60,
-        //     height: 400,
-        //   }
-        // }
+        updateScrollBox() {
+          this.scrollBox = {
+            position: {
+              x: this.x,
+              y: this.y
+            },
+            width: 60,
+            height: 400,
+          }
+        }
 
-        // shouldPanCameraUp() {
-        //   const cameraBoxTop = this.cameraBox.position.y + this.cameraBox.height;
-        //   if (cameraBoxTop >= canvas.height) {
+        // shouldScrollUp() {
+        //   const scrollBoxTop = this.scrollBox.position.y + this.scrollBox.height;
+        //   if (scrollBoxTop <= canvas.height) {
         //     console.log('go UP');
         //   }
         // }
 
         update() {
           this.draw();
-          // this.updateCameraBox();
-
-          // ctx.fillstyle = 'rgba(255, 0, 0, .2)';
-          // ctx.fillRect(
-          //   this.cameraBox.position.x,
-          //   this.cameraBox.position.y,
-          //   this.cameraBox.width,
-          //   this.cameraBox.height
-          // );
+          this.updateScrollBox();
+          // this.shouldScrollUp();
 
           this.y += this.yVelocity;
           if (this.y + this.height + this.yVelocity < canvas.height) {
           this.yVelocity += gravity;
-          } else this.yVelocity = 0;
+          } else {
+            this.yVelocity = 0;
+          }
         }
       }
 
@@ -129,11 +133,22 @@
         ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         background.draw();
-        background.position.y -= scrolling;
         orby.update();
-        orby.y -= scrolling;
         // background.translate(0, scrolling);
         // orby.translate(0, scrolling);
+
+        // Scrolling
+
+        const scrollBoxTop = orby.scrollBox.position.y + orby.scrollBox.height;
+        if (scrollBoxTop <= canvas.height) {
+          scrolling = -orby.yVelocity;
+          console.log(scrolling);
+        }
+
+        bgScroll += scrolling;
+        if (bgScroll >= canvas.height) {
+          bgScroll = 0;
+        }
 
         // Right-left directional control
 
@@ -154,8 +169,6 @@
             break
           case 'z':
             orby.yVelocity = -15;
-            // scrolling -= 2;
-            // zKeyPressed = true
             break
         }
       });
@@ -167,9 +180,6 @@
           case 'ArrowLeft': 
             leftPressed = false
             break
-          case 'z':
-            orby.yVelocity = 0;
-            // scrolling += 2;
         }
       });
       
