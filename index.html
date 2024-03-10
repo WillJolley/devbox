@@ -25,6 +25,7 @@
       // let scrollThreshold = 200;
       let scrolling = 0;
       let bgScroll = 0;
+      let floor = canvas.height;
       const gravity = .5;
       // let zKeyPressed = false;
       let rightPressed = false;
@@ -58,6 +59,13 @@
             y: -canvas.height + bgScroll
           }
         }
+
+        // updateBackground3() {
+        //   this.position = {
+        //     x: 0,
+        //     y: canvas.height - bgScroll
+        //   }
+        // }
       }
 
       let background1 = new Sprite({
@@ -76,6 +84,14 @@
         imageSrc: './img/library.png'
       })
 
+      // let background3 = new Sprite({
+      //   position: {
+      //     x: 0,
+      //     y: canvas.height - bgScroll
+      //   },
+      //   imageSrc: './img/library.png'
+      // })
+
       class Orb {
         constructor() {
           this.radius = 20;
@@ -84,7 +100,6 @@
           this.height = 20;
           this.xVelocity = 0;
           this.yVelocity = 1;
-          this.jumping = false;
           this.scrollBox = {
             position: {
               x: this.x,
@@ -114,20 +129,12 @@
           }
         }
 
-        // shouldScrollUp() {
-        //   const scrollBoxTop = this.scrollBox.position.y + this.scrollBox.height;
-        //   if (scrollBoxTop <= canvas.height) {
-        //     console.log('go UP');
-        //   }
-        // }
-
         update() {
           this.draw();
           this.updateScrollBox();
-          // this.shouldScrollUp();
 
           this.y += this.yVelocity;
-          if (this.y + this.height + this.yVelocity < canvas.height) {
+          if (this.y + this.height + this.yVelocity < floor) {
           this.yVelocity += gravity;
           } else {
             this.yVelocity = 0;
@@ -139,9 +146,7 @@
       })
       
       function animate() {
-        window.requestAnimationFrame(animate)
-        // ctx.fillStyle = 'white'
-        // ctx.fillRect(0, 0, canvas.width, canvas.height)
+        window.requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = 'steelblue';
@@ -157,13 +162,14 @@
         const scrollBoxTop = orby.scrollBox.position.y + orby.scrollBox.height;
         if (scrollBoxTop <= canvas.height) {
           scrolling = -orby.yVelocity;
-          console.log(scrolling);
-        }
+        } 
 
         bgScroll += scrolling;
         if (bgScroll >= canvas.height) {
           bgScroll = 0;
         }
+
+        floor += bgScroll;
 
         // Right-left directional control
 
@@ -183,7 +189,9 @@
             leftPressed = true
             break
           case 'z':
-            orby.yVelocity = -15;
+            if (orby.yVelocity == 0) {
+              orby.yVelocity -= 15;
+            }
             break
         }
       });
