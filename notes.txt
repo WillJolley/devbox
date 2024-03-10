@@ -1,0 +1,17 @@
+3/3/24: - Having the jumping mechanism in the eventlistener switch case
+(i.e. changing the Orb's velocity there) results in a repeatable one
+jump per press and you can continue to guide the Orb with left/right
+arrows mid-air. Whereas using the eventlistener switch case to only 
+register key-presses/releases and placing the jumping code in the 
+main draw/animate function, you can continuously move up by holding 
+down the jump key, but if you try to add directional movement at the 
+same time, the Orb falls. Additionally, if you try to jump from the 
+ground while using directional keys, it doesn't register. 
+ * correction - actually if you hold down the jump key in the first case 
+ the orb also flies
+
+3/8: - Camera box - style scrolling seems ideal; have the screen scroll 
+according to the position of the orb and its proximity to top and bottom.
+Currently messing around with attaching the scroll to the jump button, 
+which unfortunately hides what you've passed. Maybe I can combine the 
+camera box with the scrolling variable!

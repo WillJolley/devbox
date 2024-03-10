@@ -143,12 +143,11 @@
         }
 
         detectCollision() {
-          for (let i = 0; i < platformArray.length; i++) {
-            const platBlock = platformArray[i]
+          platformArray.forEach((platBlock) => {
 
             if (
-              this.y + this.radius >= platBlock.position.y - 5 &&
-              
+              this.y + this.radius >= platBlock.position.y - 3 &&
+              this.y + this.radius <= platBlock.position.y - .5 &&
               this.x <= platBlock.position.x + platformWidth &&
               this.x >= platBlock.position.x
             ) {
@@ -157,7 +156,7 @@
                 // this.y = platBlock.position.y - this.height;
               }
             }
-          }
+          });
         }
 
         update() {
@@ -197,7 +196,8 @@
 
         platformArray.forEach((p) => {
             ctx.drawImage(p.image, p.position.x, p.position.y);
-        });      
+            // p.position.y += scrolling;
+        });
 
         // Platform Collision
 
@@ -239,9 +239,11 @@
             leftPressed = true
             break
           case 'z':
-            if (orby.yVelocity == 0) {
-              orby.yVelocity -= 15;
-            }
+            // if (orby.yVelocity == 0) 
+            if (orby.yVelocity > -30) {
+              orby.yVelocity -= 15;   
+            }          
+            // }
             break
         }
       });
