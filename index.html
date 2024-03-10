@@ -80,8 +80,8 @@
 
       let platform1 = new Sprite ({
         position: {
-          x: 250,
-          y: -300
+          x: 150,
+          y: 500
         },
         imageSrc: './img/plat1.png'
       })
@@ -153,23 +153,20 @@
           let platform = new Sprite({
             position: {
               x: Math.floor(Math.random() * canvas.width - 100),
-              y: Math.floor((Math.random() * 0) - canvas.height)
+              y: Math.floor(Math.random() * 0) + canvas.height
             },
             imageSrc: './img/plat1.png'
           });
           platformArray.push(platform);
         }
 
-        // background1.draw();
-        // background2.draw();
-        // platformArray.forEach((element) => {
-        //     if (!element.image){
-        //       return;
-        //     }
-        //     ctx.drawImage(element.image, element.position.x, element.position.y);
-        // });
-        // background1.updateBackground1();
-        // background2.updateBackground2();
+        background1.draw();
+        background2.draw();
+        platformArray.forEach((element) => {
+            ctx.drawImage(element.image, element.position.x, element.position.y);
+        });
+        background1.updateBackground1();
+        background2.updateBackground2();
         platform1.draw(); 
         orby.update();       
 
