@@ -22,16 +22,15 @@
       const canvas = document.getElementById("myCanvas");
       const ctx = canvas.getContext("2d");
 
-      // let scrollThreshold = 200;
       let scrolling = 0;
       let bgScroll = 0;
       let floor = canvas.height;
       const gravity = .5;
-      // let zKeyPressed = false;
       let rightPressed = false;
       let leftPressed = false;
       let platformArray = [];
       const maxPlatforms = 10;
+      platformWidth = 109;
 
       class Sprite {
         constructor({position, imageSrc}) {
@@ -87,11 +86,25 @@
       })
       platformArray.push(platform1);
 
+      // Generate Platforms
+
+      while (platformArray.length < maxPlatforms) {
+          let previousPlatform = platformArray.length-1;
+          let platform = new Sprite({
+            position: {
+              x: Math.floor(Math.random() * (canvas.width - 120)) + 20,
+              y: platformArray[previousPlatform].position.y + Math.floor(Math.random() * -150) - 50
+            },
+            imageSrc: './img/plat1.png'
+          });
+          platformArray.push(platform);
+        }
+
       class Orb {
         constructor() {
           this.radius = 20;
-          this.x = canvas.width/2;
-          this.y = canvas.height-25;
+          this.x = 200;
+          this.y = 440;
           this.height = 20;
           this.xVelocity = 0;
           this.yVelocity = 1;
@@ -124,16 +137,42 @@
           }
         }
 
+        applyGravity() {
+          this.y += this.yVelocity;
+          this.yVelocity += gravity;
+        }
+
+        detectCollision() {
+          for (let i = 0; i < platformArray.length; i++) {
+            const platBlock = platformArray[i]
+
+            if (
+              this.y + this.radius >= platBlock.position.y - 5 &&
+              
+              this.x <= platBlock.position.x + platformWidth &&
+              this.x >= platBlock.position.x
+            ) {
+              if (this.yVelocity > 0) {
+                this.yVelocity = 0;
+                // this.y = platBlock.position.y - this.height;
+              }
+            }
+          }
+        }
+
         update() {
           this.draw();
+          this.applyGravity();
+          this.detectCollision();
           this.updateScrollBox();
 
-          this.y += this.yVelocity;
-          if (this.y + this.height + this.yVelocity < floor) {
-          this.yVelocity += gravity;
-          } else {
-            this.yVelocity = 0;
-          }
+          //Gravity + Collision detection
+  
+          // if (this.y + this.height + this.yVelocity < floor) {
+          // this.yVelocity += gravity;
+          // } else {
+          //   this.yVelocity = 0;
+          // }
         }
       }
 
@@ -146,29 +185,29 @@
 
         ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-        // Generate platforms
-
-        while (platformArray.length < maxPlatforms) {
-          let platform = new Sprite({
-            position: {
-              x: Math.floor(Math.random() * canvas.width - 100),
-              y: Math.floor(Math.random() * 0) + canvas.height
-            },
-            imageSrc: './img/plat1.png'
-          });
-          platformArray.push(platform);
-        }
-
+        
         background1.draw();
         background2.draw();
-        platformArray.forEach((element) => {
-            ctx.drawImage(element.image, element.position.x, element.position.y);
-        });
         background1.updateBackground1();
         background2.updateBackground2();
         platform1.draw(); 
-        orby.update();       
+        orby.update(); 
+
+        // Generate platforms
+
+        platformArray.forEach((p) => {
+            ctx.drawImage(p.image, p.position.x, p.position.y);
+        });      
+
+        // Platform Collision
+
+        // platformArray.forEach ((p) => {
+        //     if (orby.x >= p.position.x && orby.x <= (p.position.x + platformWidth) && (orby.y + orby.radius) === p.position.y) {
+        //       orby.yVelocity = 0;
+        //     } else {
+              
+        //     }
+        //   });
 
         // Scrolling
 
