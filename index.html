@@ -2,7 +2,7 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <title>Winterbells Clone</title>
+    <title>Winterbells Clone (Not)</title>
     <style>
       * {
         padding: 0;
@@ -30,6 +30,7 @@
       // let zKeyPressed = false;
       let rightPressed = false;
       let leftPressed = false;
+      let platformArray = [];
       const maxPlatforms = 10;
 
       class Sprite {
@@ -59,13 +60,6 @@
             y: -canvas.height + bgScroll
           }
         }
-
-        // updateBackground3() {
-        //   this.position = {
-        //     x: 0,
-        //     y: canvas.height - bgScroll
-        //   }
-        // }
       }
 
       let background1 = new Sprite({
@@ -84,13 +78,14 @@
         imageSrc: './img/library.png'
       })
 
-      // let background3 = new Sprite({
-      //   position: {
-      //     x: 0,
-      //     y: canvas.height - bgScroll
-      //   },
-      //   imageSrc: './img/library.png'
-      // })
+      let platform1 = new Sprite ({
+        position: {
+          x: 250,
+          y: -300
+        },
+        imageSrc: './img/plat1.png'
+      })
+      platformArray.push(platform1);
 
       class Orb {
         constructor() {
@@ -151,11 +146,32 @@
 
         ctx.fillStyle = 'steelblue';
         ctx.fillRect(0, 0, canvas.width, canvas.height)
-        background1.draw();
-        background2.draw();
-        background1.updateBackground1();
-        background2.updateBackground2();
-        orby.update();
+
+        // Generate platforms
+
+        while (platformArray.length < maxPlatforms) {
+          let platform = new Sprite({
+            position: {
+              x: Math.floor(Math.random() * canvas.width - 100),
+              y: Math.floor((Math.random() * 0) - canvas.height)
+            },
+            imageSrc: './img/plat1.png'
+          });
+          platformArray.push(platform);
+        }
+
+        // background1.draw();
+        // background2.draw();
+        // platformArray.forEach((element) => {
+        //     if (!element.image){
+        //       return;
+        //     }
+        //     ctx.drawImage(element.image, element.position.x, element.position.y);
+        // });
+        // background1.updateBackground1();
+        // background2.updateBackground2();
+        platform1.draw(); 
+        orby.update();       
 
         // Scrolling
 
@@ -168,8 +184,6 @@
         if (bgScroll >= canvas.height) {
           bgScroll = 0;
         }
-
-        floor += bgScroll;
 
         // Right-left directional control
 
